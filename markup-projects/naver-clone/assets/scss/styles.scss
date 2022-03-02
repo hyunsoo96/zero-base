@@ -1,0 +1,10 @@
+@import "./abstracts/variables_color";
+@import "./abstracts/variables";
+
+@import "./base/reset";
+@import "./base/preset";
+
+@import "./components/order_type";
+@import "./components/header_area";
+@import "./pages/order_page";
+@import "./components/order_info_area";
