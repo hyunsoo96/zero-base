@@ -1,12 +1,48 @@
 /* 대표 선출 */
 
+function CircularQueue(size) {
+  this.array = new Array(size);
+  this.size = this.array.length;
+  this.length = 0;
+  this.head = 0;
+  this.tail = 0;
+}
+
+CircularQueue.prototype.enqueue = function (element) {
+  this.length++;
+  this.array[this.tail++ % this.size] = element;
+};
+
+CircularQueue.prototype.dequeue = function () {
+  this.length--;
+  return this.array[this.head++ % this.size];
+};
+
 /* user code */
 function answer(n, m, k) {
   let result = [];
 
   // 코드 구현 시작 영역
 
-  // …
+  // 1. 원탁에 후보 번호 세팅 (enqueue)
+  let cq = new CircularQueue(n);
+  for (let i = 1; i <= n; i++) {
+    cq.enqueue(i);
+  }
+
+  // 2. 첫번째 후보 제거 노드 위치로 설정
+  cq.tail = cq.head = (n + m - 1) % n;
+  // 3. k만틈 움직이면서 대표 후보를 제거 (dequeue)
+  let count;
+  result.push(cq.dequeue());
+  while (cq.length != 0) {
+    count = k - 1;
+    while (count--) {
+      cq.enqueue(cq.dequeue());
+    }
+    result.push(cq.dequeue());
+  }
+  // 제거된 번호는 result에 추가
 
   // 코드 구현 종료 영역
 
