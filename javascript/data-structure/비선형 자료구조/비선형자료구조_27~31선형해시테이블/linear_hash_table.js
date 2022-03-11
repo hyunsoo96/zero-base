@@ -21,6 +21,55 @@ LinearHashTable.prototype.hashCode = function (key) {
   return hash % HASH_SIZE;
 };
 
+// put() : 데이터 추가
+LinearHashTable.prototype.put = function (key, value) {
+  let index = this.hashCode(key);
+  let startIndex = index;
+  console.log(`key: ${key} -> index: ${index}`);
+
+  do {
+    if (this.table[index] === undefined) {
+      this.table[index] = new Element(key, value);
+      this.length++;
+      return true;
+    }
+    index = (index + 1) % HASH_SIZE;
+  } while (index !== startIndex);
+  return false;
+};
+
+// get(): 데이터 조회
+LinearHashTable.prototype.get = function (key) {
+  let index = this.hashCode(key);
+  let startIndex = index;
+
+  do {
+    if (this.table[index] !== undefined && this.table[index].key === key) {
+      return this.table[index].value;
+    }
+    index = (index + 1) % HASH_SIZE;
+  } while (index !== startIndex);
+  return undefined;
+};
+
+// remove(): 데이터 삭제
+LinearHashTable.prototype.remove = function (key) {
+  let index = this.hashCode(key);
+  let startIndex = index;
+
+  do {
+    if (this.table[index] !== undefined && this.table[index].key === key) {
+      let element = this.table[index];
+      delete this.table[index];
+      this.length--;
+      return element;
+    }
+    index = (index + 1) % HASH_SIZE;
+  } while (index !== startIndex);
+
+  return undefined;
+};
+
 // clear(): 초기화
 LinearHashTable.prototype.clear = function () {
   this.table = new Array(HASH_SIZE);
@@ -53,4 +102,15 @@ LinearHashTable.prototype.print = function () {
 };
 
 let lht = new LinearHashTable();
-console.log(lht);
+
+lht.put("Ana", 172);
+lht.put("John", 179);
+lht.put("Donnie", 183);
+lht.put("Mindy", 190);
+lht.put("Paul", 168);
+console.log("");
+
+console.log(lht.remove("Ana"));
+console.log(lht.get("Paul"));
+console.log(lht.remove("Paul"));
+console.log(lht.get("Paul"));
